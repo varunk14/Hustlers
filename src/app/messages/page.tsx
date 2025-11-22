@@ -3,7 +3,7 @@
 // Disable static generation for this page
 export const dynamic = 'force-dynamic'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import {
   Box,
@@ -44,7 +44,7 @@ import { MessageInput } from '@/components/message/MessageInput'
 import { MessageWithUser } from '@/types/message'
 import { createClient } from '@/lib/supabase/client'
 
-export default function MessagesPage() {
+function MessagesContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const conversationId = searchParams.get('conversation')
@@ -309,8 +309,9 @@ export default function MessagesPage() {
                         status: 'error',
                         duration: 5000,
                       })
+                      return { error: result.error }
                     }
-                    return result
+                    return {}
                   }}
                   sending={messageSending}
                 />
@@ -505,6 +506,22 @@ export default function MessagesPage() {
         )}
       </MainLayout>
     </ProtectedRoute>
+  )
+}
+
+export default function MessagesPage() {
+  return (
+    <Suspense fallback={
+      <ProtectedRoute>
+        <MainLayout>
+          <Center h="calc(100vh - 80px)">
+            <Text>Loading...</Text>
+          </Center>
+        </MainLayout>
+      </ProtectedRoute>
+    }>
+      <MessagesContent />
+    </Suspense>
   )
 }
 

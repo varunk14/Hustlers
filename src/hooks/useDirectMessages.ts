@@ -76,10 +76,17 @@ export function useDirectMessages() {
         .order('created_at', { ascending: false })
 
       // Group last messages by conversation
-      const lastMessagesMap = new Map<string, typeof lastMessages[0]>()
+      type LastMessage = {
+        id: string
+        content: string
+        created_at: string
+        user_id: string
+        conversation_id: string | null
+      }
+      const lastMessagesMap = new Map<string, LastMessage>()
       lastMessages?.forEach((msg) => {
         if (msg.conversation_id && !lastMessagesMap.has(msg.conversation_id)) {
-          lastMessagesMap.set(msg.conversation_id, msg)
+          lastMessagesMap.set(msg.conversation_id, msg as LastMessage)
         }
       })
 

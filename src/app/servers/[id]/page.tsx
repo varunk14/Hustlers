@@ -198,8 +198,9 @@ export default function ServerPage() {
         status: 'error',
         duration: 5000,
       })
+      return { error: result.error }
     }
-    return result
+    return {}
   }
 
   const handleEditChannel = (channel: Channel) => {
@@ -216,11 +217,12 @@ export default function ServerPage() {
         status: 'error',
         duration: 5000,
       })
+      return { error: result.error }
     } else {
       onEditClose()
       setEditingChannel(null)
     }
-    return result
+    return {}
   }
 
   const handleDeleteChannel = async (channelIdToDelete: string) => {
@@ -392,8 +394,9 @@ export default function ServerPage() {
                               status: 'error',
                               duration: 5000,
                             })
+                            return { error: result.error }
                           }
-                          return result
+                          return {}
                         }}
                         sending={messageSending}
                       />
