@@ -390,9 +390,12 @@ export default function ServerPage() {
                           const result = await sendMessage(input)
                           console.log('📥 ServerPage: Send result:', result)
                           
-                          // Don't show toast here - MessageInput already handles it
-                          // Just return the result
-                          return result
+                          // Transform result to match MessageInput's expected type
+                          // MessageInput expects { error?: string }
+                          if (result.error) {
+                            return { error: result.error }
+                          }
+                          return {}
                         }}
                         sending={messageSending}
                       />
