@@ -28,15 +28,26 @@ export function MessageInput({ onSend, sending = false, placeholder = 'Type a me
   const handleSend = async () => {
     if (!content.trim() || sending) return
 
+    console.log('📨 MessageInput: Attempting to send message:', content)
     const result = await onSend({ content })
+    console.log('📬 MessageInput: Send result:', result)
+    
     if (result.error) {
+      console.error('❌ MessageInput: Error received:', result.error)
+      // Log to window for visibility
+      if (typeof window !== 'undefined') {
+        window.console.error('MESSAGE INPUT ERROR:', result.error)
+      }
+      
       toast({
         title: 'Error sending message',
         description: result.error,
         status: 'error',
-        duration: 5000,
+        duration: 10000, // Longer duration to read the error
+        isClosable: true,
       })
     } else {
+      console.log('✅ MessageInput: Message sent successfully')
       setContent('')
     }
   }

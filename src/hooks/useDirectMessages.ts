@@ -178,27 +178,51 @@ export function useDirectMessages() {
         .select()
         .single()
 
-      if (createError) throw createError
+      if (createError) {
+        console.error('Error creating conversation:', createError)
+        throw new Error(`Failed to create conversation: ${createError.message || createError.code || JSON.stringify(createError)}`)
+      }
 
       // Add current user as participant
-      await supabase.from('direct_message_participants').insert({
+      const { error: currentUserError } = await supabase
+        .from('direct_message_participants')
+        .insert({
         conversation_id: conversation.id,
         user_id: user.id,
       })
 
+      if (currentUserError) {
+        // Clean up the conversation if we can't add the current user
+        await supabase.from('direct_messages').delete().eq('id', conversation.id)
+        console.error('Error adding current user as participant:', currentUserError)
+        const detailedError = currentUserError.message || currentUserError.code || JSON.stringify(currentUserError)
+        throw new Error(`Failed to add current user as participant: ${detailedError}. This is likely an RLS policy issue.`)
+      }
+
       // Add other participants
       if (input.participant_ids.length > 0) {
-        await supabase.from('direct_message_participants').insert(
+        const { error: participantsError } = await supabase
+          .from('direct_message_participants')
+          .insert(
           input.participant_ids.map((userId) => ({
             conversation_id: conversation.id,
             user_id: userId,
           }))
         )
+
+        if (participantsError) {
+          // Clean up the conversation if we can't add participants
+          await supabase.from('direct_messages').delete().eq('id', conversation.id)
+          console.error('Error adding participants:', participantsError)
+          const detailedError = participantsError.message || participantsError.code || JSON.stringify(participantsError)
+          throw new Error(`Failed to add participants: ${detailedError}. This is likely an RLS policy issue.`)
+        }
       }
 
       await fetchConversations()
       return { data: conversation, error: null }
     } catch (err) {
+      console.error('Error creating conversation:', err)
       const errorMessage = err instanceof Error ? err.message : 'Failed to create conversation'
       setError(errorMessage)
       return { error: errorMessage }

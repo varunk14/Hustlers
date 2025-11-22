@@ -386,17 +386,13 @@ export default function ServerPage() {
                     {isMember && (
                       <MessageInput
                         onSend={async (input) => {
+                          console.log('📤 ServerPage: Sending message via MessageInput')
                           const result = await sendMessage(input)
-                          if (result.error) {
-                            toast({
-                              title: 'Error',
-                              description: result.error,
-                              status: 'error',
-                              duration: 5000,
-                            })
-                            return { error: result.error }
-                          }
-                          return {}
+                          console.log('📥 ServerPage: Send result:', result)
+                          
+                          // Don't show toast here - MessageInput already handles it
+                          // Just return the result
+                          return result
                         }}
                         sending={messageSending}
                       />

@@ -153,9 +153,15 @@ export function useMessages(channelId: string | null, conversationId: string | n
   }, [channelId, conversationId, user, supabase, fetchMessages])
 
   const sendMessage = async (input: CreateMessageInput) => {
-    if ((!channelId && !conversationId) || !user) return { error: 'You must be logged in to send a message' }
+    console.log('🔵 sendMessage called', { channelId, conversationId, user: user?.id, content: input.content })
+    
+    if ((!channelId && !conversationId) || !user) {
+      console.warn('❌ Missing channel/conversation or user', { channelId, conversationId, hasUser: !!user })
+      return { error: 'You must be logged in to send a message' }
+    }
 
     if (!input.content.trim()) {
+      console.warn('❌ Empty message content')
       return { error: 'Message cannot be empty' }
     }
 
@@ -174,18 +180,83 @@ export function useMessages(channelId: string | null, conversationId: string | n
         messageData.conversation_id = conversationId
       }
 
+      console.log('📤 Attempting to send message:', messageData)
+      
+      // Check session before sending
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+      console.log('🔐 Current session:', { 
+        hasSession: !!session, 
+        userId: session?.user?.id,
+        sessionError: sessionError?.message 
+      })
+
       const { data: message, error: sendError } = await supabase
         .from('messages')
         .insert(messageData)
         .select()
         .single()
 
-      if (sendError) throw sendError
+      console.log('📥 Insert response:', { 
+        hasData: !!message, 
+        hasError: !!sendError,
+        error: sendError ? {
+          message: sendError.message,
+          code: sendError.code,
+          details: sendError.details,
+          hint: sendError.hint,
+          full: sendError
+        } : null
+      })
 
+      if (sendError) {
+        // Log full error details
+        console.error('❌ Error sending message - Full details:', {
+          code: sendError.code,
+          message: sendError.message,
+          details: sendError.details,
+          hint: sendError.hint,
+          fullError: JSON.stringify(sendError, null, 2)
+        })
+        
+        // Provide more detailed error message
+        let errorMessage = 'Failed to send message'
+        
+        if (sendError.code === '42501') {
+          errorMessage = 'Permission denied. You may not have access to send messages in this channel.'
+        } else if (sendError.code === '23503') {
+          errorMessage = 'Invalid channel or conversation. Please refresh and try again.'
+        } else if (sendError.code === 'PGRST116') {
+          errorMessage = 'No rows returned. Check if the channel exists and you have permission.'
+        } else if (sendError.message) {
+          errorMessage = sendError.message
+          // Include code if available
+          if (sendError.code) {
+            errorMessage = `[${sendError.code}] ${sendError.message}`
+          }
+        } else if (sendError.code) {
+          errorMessage = `Error (${sendError.code}): ${sendError.hint || 'Please try again'}`
+        }
+        
+        // Also log to window for visibility
+        if (typeof window !== 'undefined') {
+          window.console.error('MESSAGE SEND ERROR:', errorMessage, sendError)
+        }
+        
+        throw new Error(errorMessage)
+      }
+
+      console.log('✅ Message sent successfully:', message)
       // The real-time subscription will handle adding it to the list
       return { data: message, error: null }
     } catch (err) {
+      console.error('❌ Exception in sendMessage:', err)
       const errorMessage = err instanceof Error ? err.message : 'Failed to send message'
+      
+      // Log to window for visibility
+      if (typeof window !== 'undefined') {
+        window.console.error('MESSAGE SEND EXCEPTION:', errorMessage, err)
+      }
+      
       setError(errorMessage)
       return { error: errorMessage }
     } finally {
