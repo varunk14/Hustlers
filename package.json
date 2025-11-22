@@ -1,0 +1,58 @@
+{
+  "name": "discord-style-community-platform",
+  "version": "0.1.0",
+  "description": "A full-featured community platform inspired by Discord with chat, voice, video, roles, bots, and moderation",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "next": "^14.2.5",
+    "@chakra-ui/react": "^2.8.2",
+    "@chakra-ui/icons": "^2.1.1",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "framer-motion": "^11.3.19",
+    "@supabase/supabase-js": "^2.39.3",
+    "@supabase/ssr": "^0.1.0",
+    "socket.io-client": "^4.7.4",
+    "zustand": "^4.5.2",
+    "react-hook-form": "^7.51.0",
+    "zod": "^3.23.8",
+    "@hookform/resolvers": "^3.3.4",
+    "date-fns": "^3.6.0",
+    "react-markdown": "^9.0.1",
+    "remark-gfm": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "typescript": "^5.5.3",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.5",
+    "@testing-library/react": "^14.1.0",
+    "@testing-library/jest-dom": "^6.1.0",
+    "@testing-library/user-event": "^14.5.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "@types/jest": "^29.5.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "overrides": {
+    "glob": "^10.4.6"
+  }
+}
+
