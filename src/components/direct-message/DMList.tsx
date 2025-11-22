@@ -19,6 +19,7 @@ interface DMListProps {
   loading?: boolean
   selectedConversationId?: string | null
   onConversationClick?: (conversationId: string) => void
+  currentUserId?: string
 }
 
 export function DMList({
