@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import {
-  DirectMessage,
   DirectMessageWithParticipants,
   CreateDirectMessageInput,
   UpdateDirectMessageInput,
@@ -88,7 +87,6 @@ export function useDirectMessages() {
       const conversationsWithParticipants: DirectMessageWithParticipants[] =
         conversationsData?.map((conv) => {
           const convParticipants = allParticipants?.filter((p) => p.conversation_id === conv.id) || []
-          const otherParticipants = convParticipants.filter((p) => p.user_id !== user.id)
 
           return {
             ...conv,

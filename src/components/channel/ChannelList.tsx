@@ -42,11 +42,11 @@ export function ChannelList({
   const [userRole, setUserRole] = useState<'owner' | 'admin' | 'member' | null>(null)
   const supabase = createClient()
 
-  const bg = useColorModeValue('gray.50', 'gray.800')
   const hoverBg = useColorModeValue('gray.100', 'gray.700')
   const selectedBg = useColorModeValue('blue.100', 'blue.900')
   const textColor = useColorModeValue('gray.700', 'gray.300')
   const selectedTextColor = useColorModeValue('blue.700', 'blue.200')
+  const sectionTitleColor = useColorModeValue('gray.500', 'gray.400')
 
   useEffect(() => {
     if (!user) return
@@ -152,7 +152,7 @@ export function ChannelList({
           fontSize="xs"
           fontWeight="bold"
           textTransform="uppercase"
-          color={useColorModeValue('gray.500', 'gray.400')}
+          color={sectionTitleColor}
           px={2}
           py={1}
         >

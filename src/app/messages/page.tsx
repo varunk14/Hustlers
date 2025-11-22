@@ -43,7 +43,6 @@ import { MessageList } from '@/components/message/MessageList'
 import { MessageInput } from '@/components/message/MessageInput'
 import { MessageWithUser } from '@/types/message'
 import { createClient } from '@/lib/supabase/client'
-import { useEffect } from 'react'
 
 export default function MessagesPage() {
   const searchParams = useSearchParams()
@@ -72,8 +71,7 @@ export default function MessagesPage() {
   const [editingMessage, setEditingMessage] = useState<MessageWithUser | null>(null)
   const [newConversationUsers, setNewConversationUsers] = useState<string[]>([])
   const [searchQuery, setSearchQuery] = useState('')
-  const [searchResults, setSearchResults] = useState<any[]>([])
-  const [searching, setSearching] = useState(false)
+  const [searchResults, setSearchResults] = useState<Array<{ id: string; display_name: string | null; avatar_url: string | null }>>([])
 
   const {
     isOpen: isCreateOpen,
@@ -99,7 +97,6 @@ export default function MessagesPage() {
       return
     }
 
-    setSearching(true)
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -113,8 +110,6 @@ export default function MessagesPage() {
       }
     } catch (err) {
       console.error('Error searching users:', err)
-    } finally {
-      setSearching(false)
     }
   }
 

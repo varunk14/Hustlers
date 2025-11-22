@@ -18,7 +18,6 @@ import {
   Badge,
   useColorModeValue,
   Flex,
-  Divider,
   IconButton,
   useDisclosure,
   useToast,

@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Message, MessageWithUser, CreateMessageInput, UpdateMessageInput } from '@/types/message'
 import { useAuth } from '@/contexts/AuthContext'
-import { RealtimePostgresChangesPayload } from '@supabase/supabase-js'
+import { RealtimePostgresChangesPayload, RealtimeChannel } from '@supabase/supabase-js'
 
 export function useMessages(channelId: string | null, conversationId: string | null = null) {
   const [messages, setMessages] = useState<MessageWithUser[]>([])
@@ -13,7 +13,7 @@ export function useMessages(channelId: string | null, conversationId: string | n
   const [sending, setSending] = useState(false)
   const { user } = useAuth()
   const supabase = createClient()
-  const subscriptionRef = useRef<any>(null)
+  const subscriptionRef = useRef<RealtimeChannel | null>(null)
 
   const fetchMessages = useCallback(async () => {
     if ((!channelId && !conversationId) || !user) {
@@ -163,7 +163,7 @@ export function useMessages(channelId: string | null, conversationId: string | n
       setSending(true)
       setError(null)
 
-      const messageData: any = {
+      const messageData: { user_id: string; content: string; channel_id?: string; conversation_id?: string } = {
         user_id: user.id,
         content: input.content.trim(),
       }

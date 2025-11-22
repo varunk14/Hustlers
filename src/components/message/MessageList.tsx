@@ -48,7 +48,7 @@ export function MessageList({ messages, loading, onEdit, onDelete }: MessageList
   const groupedMessages: Array<{ message: MessageWithUser; showAvatar: boolean }> = []
   let lastUserId: string | null = null
 
-  messages.forEach((message, index) => {
+  messages.forEach((message) => {
     const showAvatar = message.user_id !== lastUserId
     groupedMessages.push({ message, showAvatar })
     lastUserId = message.user_id

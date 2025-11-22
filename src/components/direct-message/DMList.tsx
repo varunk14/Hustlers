@@ -28,7 +28,6 @@ export function DMList({
   onConversationClick,
   currentUserId,
 }: DMListProps) {
-  const bg = useColorModeValue('gray.50', 'gray.800')
   const hoverBg = useColorModeValue('gray.100', 'gray.700')
   const selectedBg = useColorModeValue('blue.100', 'blue.900')
   const textColor = useColorModeValue('gray.700', 'gray.300')
