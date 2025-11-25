@@ -105,7 +105,7 @@ community/
 5. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
-## 📚 MVP Roadmap
+
 
 This project follows a lean, modular MVP approach. Each MVP is a building block:
 
@@ -119,7 +119,7 @@ This project follows a lean, modular MVP approach. Each MVP is a building block:
 8. ⏳ Direct Messaging (1:1 / Small Group)
 9. ⏳ Media Sharing
 10. ⏳ Invite System
-... and 20 more MVPs to follow
+
 
 See the [Complete Project Specification](./#%20Discord-Style%20Community%20Platform%20–%20Complete%20Project%20Specification.md) for the full roadmap.
 
