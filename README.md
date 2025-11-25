@@ -136,15 +136,6 @@ npm run test:watch
 npm run test:coverage
 ```
 
-## 📝 Development Guidelines
-
-- **Explain Before Building**: Each MVP is explained thoroughly before implementation
-- **Understanding Confirmation**: Implementation only proceeds after understanding is confirmed
-- **Documentation**: All processes are documented for later review
-- **Accessibility**: All UI must be keyboard accessible with basic ARIA support
-- **Performance**: Monitor users, latency, and errors from the start
-- **Version Control**: Use descriptive Git commits and clear PRs
-
 ## 🤝 Contributing
 
 This is a learning project. Contributions, suggestions, and improvements are welcome!
